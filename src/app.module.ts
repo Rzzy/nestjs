@@ -8,15 +8,19 @@ import Configuration from './configuration';
 import * as Joi from 'joi';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigEnum } from './enum/config.enum';
-// const envFilePath = `.env.${process.env.NODE_ENV}`;
+import { User } from './user/user.entity';
+import { Profile } from './user/profile.entity';
+import { Logs } from './logs/logs.entity';
+import { Roles } from './roles/roles.entity';
+const envFilePath = `.env.${process.env.NODE_ENV}`;
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       // ignoreEnvFile: true, // 忽略默认配置文件，否则无法使用自定义的配置文件
       isGlobal: true, // 设置此参数为true， 则全局可用，否则只能在app模块中使用
-      // envFilePath: envFilePath, // 设置配置文件的路径,
-      load: [/*() => dotenv.config({ path: '.env' })*/ Configuration], // 使用load配置和dotenv加载公共配置并合并配置
+      envFilePath: envFilePath, // 设置配置文件的路径,
+      load: [() => dotenv.config({ path: '.env' }) /* Configuration*/], // 使用load配置和dotenv加载公共配置并合并配置
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
           .valid('development', 'production')
@@ -43,19 +47,20 @@ import { ConfigEnum } from './enum/config.enum';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        ({
+      useFactory: (configService: ConfigService) => {
+        return {
           type: configService.get(ConfigEnum.DB_TYPE),
           host: configService.get(ConfigEnum.DB_HOST),
           port: configService.get(ConfigEnum.DB_PORT),
           username: configService.get(ConfigEnum.DB_USERNAME),
           password: configService.get(ConfigEnum.DB_PASSWORD),
           database: configService.get(ConfigEnum.DB_DATABASE),
-          entities: [],
+          entities: [User, Profile, Logs, Roles],
           // 同步本地schema与数据库 -> 初始化的时候去使用
           synchronize: configService.get(ConfigEnum.DB_SYNC),
           logging: [configService.get(ConfigEnum.DB_LOGGING)],
-        } as TypeOrmModuleOptions),
+        } as TypeOrmModuleOptions;
+      },
     }),
     UserModule,
   ],
