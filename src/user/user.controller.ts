@@ -2,6 +2,7 @@ import { Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { ConfigEnum } from 'src/enum/config.enum';
+import { User } from './user.entity';
 
 @Controller('user')
 export class UserController {
@@ -15,10 +16,14 @@ export class UserController {
   getUsers(): any {
     const data = this.configService.get('db');
     console.log('configns:', data);
-    return this.userService.getUsers();
+    return this.userService.findAll();
   }
   @Post()
   addUser(): any {
-    return this.userService.addUser();
+    const user = {
+      username: 'rain',
+      password: '123456',
+    } as User;
+    return this.userService.create(user);
   }
 }
