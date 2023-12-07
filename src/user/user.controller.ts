@@ -26,4 +26,22 @@ export class UserController {
     } as User;
     return this.userService.create(user);
   }
+
+  @Get('/profile')
+  getUserProfile() {
+    return this.userService.findProfile(1);
+  }
+
+  @Get('/logs')
+  getLogs() {
+    return this.userService.findLogs(1);
+  }
+  @Get('/logsByGroup')
+  async getLogsByGroup(): Promise<any> {
+    const res = await this.userService.findLogsByGroup(2);
+    return res.map((el) => ({
+      result: el.result,
+      count: el.count,
+    }));
+  }
 }
