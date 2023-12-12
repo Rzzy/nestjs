@@ -13,7 +13,8 @@ import { Profile } from './user/profile.entity';
 import { Logs } from './logs/logs.entity';
 import { Roles } from './roles/roles.entity';
 const envFilePath = `.env.${process.env.NODE_ENV}`;
-
+import { LoggerModule } from 'nestjs-pino';
+import { join } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -58,11 +59,53 @@ const envFilePath = `.env.${process.env.NODE_ENV}`;
           entities: [User, Profile, Logs, Roles],
           // 同步本地schema与数据库 -> 初始化的时候去使用
           synchronize: configService.get(ConfigEnum.DB_SYNC),
-          logging: process.env.NODE_ENV === 'development',
+          logging: false, //process.env.NODE_ENV === 'development',
         } as TypeOrmModuleOptions;
       },
     }),
     UserModule,
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          targets: [
+            {
+              level: 'info',
+              target: 'pino-pretty',
+              options: {
+                colorize: true,
+              },
+            },
+            {
+              level: 'info',
+              target: 'pino-roll',
+              options: {
+                file: join('logs', 'log.txt'),
+                frequency: 'daily',
+                // size: '0.1k', // 设置日志文件大小
+                mkdir: true,
+              },
+            },
+          ],
+        },
+        /* 正常配置方式
+          process.env.NODE_ENV === 'development'
+            ? {
+                target: 'pino-pretty',
+                options: {
+                  colorize: true,
+                },
+              }
+            : {
+                target: 'pino-roll',
+                options: {
+                  file: 'log.txt',
+                  frequency: 'daily',
+                  mkdir: true,
+                },
+              },
+              */
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
