@@ -1,4 +1,11 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { User } from './user.entity';
@@ -19,6 +26,12 @@ export class UserController {
   getUsers(): any {
     const data = this.configService.get('db');
     this.logger.log('请求用户成功');
+    const user = { isAdmin: false };
+    if (!user.isAdmin) {
+      // throw new HttpException('用户没有访问权限', HttpStatus.FORBIDDEN);
+      throw new BadRequestException('访问报错');
+    }
+
     return this.userService.findAll();
   }
   @Post()
