@@ -3,12 +3,12 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
-  Logger,
+  LoggerService,
 } from '@nestjs/common';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  constructor(private logger: Logger) {}
+  constructor(private readonly logger: LoggerService) {}
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     // 响应请求对象

@@ -50,13 +50,14 @@ async function bootstrap() {
       }),
     ],
   });
+  const logger = WinstonModule.createLogger({
+    instance,
+  });
   const app = await NestFactory.create(AppModule, {
-    logger: WinstonModule.createLogger({
-      instance,
-    }),
+    logger,
   });
   app.setGlobalPrefix('api/v1');
-  // app.useGlobalFilters(new HttpExceptionFilter(logger));
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
   await app.listen(3000);
   // logger.log(`App run in port 3000`);
   // logger.warn(`App run in port 3000`);
