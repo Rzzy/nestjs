@@ -4,12 +4,15 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Inject,
+  Logger,
+  LoggerService,
   Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { User } from './user.entity';
-import { Logger } from 'nestjs-pino';
+// import { Logger } from 'nestjs-pino';
 
 @Controller('user')
 export class UserController {
@@ -17,7 +20,7 @@ export class UserController {
   constructor(
     private userService: UserService,
     private configService: ConfigService,
-    private logger: Logger,
+    private readonly logger: Logger,
   ) {
     // private userService:UserService： 这个是 this.userService = userService 的语法糖
     this.logger.log('UserController init');
@@ -26,6 +29,8 @@ export class UserController {
   getUsers(): any {
     const data = this.configService.get('db');
     this.logger.log('请求用户成功');
+    this.logger.warn('请求用户成功');
+    this.logger.error('请求用户成功');
     const user = { isAdmin: false };
     if (!user.isAdmin) {
       // throw new HttpException('用户没有访问权限', HttpStatus.FORBIDDEN);

@@ -30,12 +30,15 @@
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "mysql2": "^3.6.5",
+    "nest-winston": "^1.9.4",
     "nestjs-pino": "^3.5.0",
     "pino-pretty": "^10.2.3",
     "pino-roll": "1.0.0-rc.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
