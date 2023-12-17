@@ -16,6 +16,7 @@ const envFilePath = `.env.${process.env.NODE_ENV}`;
 // import { Logger, LoggerModule } from 'nestjs-pino';
 import { join } from 'path';
 import { LogsModule } from './logs/logs.module';
+import ormconfig from '../ormconfig';
 @Global()
 @Module({
   imports: [
@@ -33,83 +34,9 @@ import { LogsModule } from './logs/logs.module';
         }),
       }),
     }),
-    /*
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'example',
-      database: 'testdb',
-      entities: [],
-      // 同步本地schema与数据库 -> 初始化的时候去使用
-      synchronize: true,
-      logging: ['error'],
-    }),
-    */
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        return {
-          type: configService.get(ConfigEnum.DB_TYPE),
-          host: configService.get(ConfigEnum.DB_HOST),
-          port: configService.get(ConfigEnum.DB_PORT),
-          username: configService.get(ConfigEnum.DB_USERNAME),
-          password: configService.get(ConfigEnum.DB_PASSWORD),
-          database: configService.get(ConfigEnum.DB_DATABASE),
-          entities: [User, Profile, Logs, Roles],
-          // 同步本地schema与数据库 -> 初始化的时候去使用
-          synchronize: configService.get(ConfigEnum.DB_SYNC),
-          logging: false, //process.env.NODE_ENV === 'development',
-        } as TypeOrmModuleOptions;
-      },
-    }),
+    TypeOrmModule.forRoot(ormconfig),
     UserModule,
     LogsModule,
-
-    // LoggerModule.forRoot({
-    //   pinoHttp: {
-    //     transport: {
-    //       targets: [
-    //         {
-    //           level: 'info',
-    //           target: 'pino-pretty',
-    //           options: {
-    //             colorize: true,
-    //           },
-    //         },
-    //         {
-    //           level: 'info',
-    //           target: 'pino-roll',
-    //           options: {
-    //             file: join('logs', 'log.txt'),
-    //             frequency: 'daily',
-    //             // size: '0.1k', // 设置日志文件大小
-    //             mkdir: true,
-    //           },
-    //         },
-    //       ],
-    //     },
-    //     /* 正常配置方式
-    //       process.env.NODE_ENV === 'development'
-    //         ? {
-    //             target: 'pino-pretty',
-    //             options: {
-    //               colorize: true,
-    //             },
-    //           }
-    //         : {
-    //             target: 'pino-roll',
-    //             options: {
-    //               file: 'log.txt',
-    //               frequency: 'daily',
-    //               mkdir: true,
-    //             },
-    //           },
-    //           */
-    //   },
-    // }),
   ],
   controllers: [AppController],
   providers: [AppService, Logger],
