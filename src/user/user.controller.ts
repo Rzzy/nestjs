@@ -12,6 +12,7 @@ import {
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { User } from './user.entity';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 // import { Logger } from 'nestjs-pino';
 
 @Controller('user')
@@ -20,7 +21,8 @@ export class UserController {
   constructor(
     private userService: UserService,
     private configService: ConfigService,
-    private readonly logger: Logger,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {
     // private userService:UserService： 这个是 this.userService = userService 的语法糖
     this.logger.log('UserController init');

@@ -15,6 +15,7 @@ import { Roles } from './roles/roles.entity';
 const envFilePath = `.env.${process.env.NODE_ENV}`;
 // import { Logger, LoggerModule } from 'nestjs-pino';
 import { join } from 'path';
+import { LogsModule } from './logs/logs.module';
 @Global()
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { join } from 'path';
       },
     }),
     UserModule,
+    LogsModule,
 
     // LoggerModule.forRoot({
     //   pinoHttp: {
