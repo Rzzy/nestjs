@@ -34,6 +34,7 @@ export class UserController {
     this.logger.warn('请求用户成功');
     this.logger.error('请求用户成功');
     const user = { isAdmin: false };
+
     if (!user.isAdmin) {
       // throw new HttpException('用户没有访问权限', HttpStatus.FORBIDDEN);
       throw new BadRequestException('访问报错');
