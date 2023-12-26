@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   HttpException,
@@ -42,8 +43,13 @@ export class UserController {
 
     return this.userService.findAll();
   }
+  @Get('/:id')
+  getUser(): any {
+    return 'hellow ';
+  }
   @Post()
-  addUser(): any {
+  addUser(@Body() dto: any): any {
+    console.log('----------------', dto);
     const user = {
       username: 'rain',
       password: '123456',

@@ -21,7 +21,7 @@ function buildConnectionOptions() {
   const config = { ...defaultConfig, ...envConfig };
   // ToDo: 使用entitysDir代替实体类的引入
   const entitysDir =
-    process.env.NODE_ENV === 'test'
+    process.env.NODE_ENV === 'development'
       ? [join(__dirname, '/**/*.entity{.js,.ts}')]
       : [__dirname + '/**/*.entity{.js,.ts}'];
   console.log(entitysDir);
