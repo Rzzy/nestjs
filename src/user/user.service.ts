@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { Logs } from '../logs/logs.entity';
+import { getUserDto } from './dto/get-user.dto';
 
 @Injectable()
 export class UserService {
@@ -17,7 +18,7 @@ export class UserService {
       messge: '添加用户成功',
     };
   }
-  findAll() {
+  findAll(query: getUserDto) {
     return this.userRepository.find();
   }
   find(username: string) {

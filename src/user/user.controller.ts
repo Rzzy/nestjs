@@ -16,14 +16,8 @@ import { ConfigService } from '@nestjs/config';
 import { User } from './user.entity';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { query } from 'express';
+import { getUserDto } from './dto/get-user.dto';
 // import { Logger } from 'nestjs-pino';
-interface getUserDto {
-  page: number;
-  limit?: number;
-  userName?: string;
-  role: number;
-  gender?: number;
-}
 @Controller('user')
 export class UserController {
   // private logger = new Logger(UserController.name);
@@ -43,7 +37,7 @@ export class UserController {
       query,
     );
     const data = this.configService.get('db');
-    return this.userService.findAll();
+    return this.userService.findAll(query);
   }
   @Get('/:id')
   getUser(): any {
