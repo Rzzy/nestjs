@@ -9,13 +9,21 @@ import {
   Logger,
   LoggerService,
   Post,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { User } from './user.entity';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { query } from 'express';
 // import { Logger } from 'nestjs-pino';
-
+interface getUserDto {
+  page: number;
+  limit?: number;
+  userName?: string;
+  role: number;
+  gender?: number;
+}
 @Controller('user')
 export class UserController {
   // private logger = new Logger(UserController.name);
@@ -29,18 +37,12 @@ export class UserController {
     this.logger.log('UserController init');
   }
   @Get()
-  getUsers(): any {
+  getUsers(@Query() query: getUserDto): any {
+    console.log(
+      '🚀 ~ file: user.controller.ts:41 ~ UserController ~ getUsers ~ query:',
+      query,
+    );
     const data = this.configService.get('db');
-    this.logger.log('请求用户成功');
-    this.logger.warn('请求用户成功');
-    this.logger.error('请求用户成功');
-    const user = { isAdmin: false };
-
-    if (!user.isAdmin) {
-      // throw new HttpException('用户没有访问权限', HttpStatus.FORBIDDEN);
-      throw new BadRequestException('访问报错');
-    }
-
     return this.userService.findAll();
   }
   @Get('/:id')
