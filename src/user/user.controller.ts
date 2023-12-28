@@ -2,12 +2,15 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
   Inject,
   Logger,
   LoggerService,
+  Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -46,10 +49,7 @@ export class UserController {
   @Post()
   addUser(@Body() dto: any): any {
     console.log('----------------', dto);
-    const user = {
-      username: 'rain',
-      password: '123456',
-    } as User;
+    const user = dto as User;
     return this.userService.create(user);
   }
 
@@ -57,7 +57,19 @@ export class UserController {
   getUserProfile() {
     return this.userService.findProfile(1);
   }
-
+  @Patch('/:id')
+  updateUser(@Body() dto: any, @Param('id') id: number) {
+    console.log(
+      '🚀 ~ file: user.controller.ts:61 ~ UserController ~ updateUser ~ dto:',
+      dto,
+    );
+    const user = dto as User;
+    return this.userService.update(id, user);
+  }
+  @Delete('/:id')
+  deletUser(@Param('id') id: number) {
+    return this.userService.remove(id);
+  }
   @Get('/logs')
   getLogs() {
     return this.userService.findLogs(1);
