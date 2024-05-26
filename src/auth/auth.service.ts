@@ -6,7 +6,7 @@ export class AuthService {
   constructor(private userService: UserService) { }
   async signin(username:string, password:string) {
     
-    return await this.userService.find(username)
+    return await this.userService.find(username);
   }
   signup(username:string, password:string) {
     return 'fronm signup ' + username + password;
