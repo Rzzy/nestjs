@@ -17,6 +17,7 @@ const envFilePath = `.env.${process.env.NODE_ENV}`;
 import { join } from 'path';
 import { LogsModule } from './logs/logs.module';
 import { connectionParams } from '../ormconfig';
+import { AuthModule } from './auth/auth.module';
 @Global()
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { connectionParams } from '../ormconfig';
     TypeOrmModule.forRoot(connectionParams),
     UserModule,
     LogsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger],
