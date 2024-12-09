@@ -27,7 +27,10 @@ export class UserService {
   findOne(id: number) {
     return this.userRepository.findOne({ where: { id } });
   }
-  async create(user: User) {
+  async create(user: Partial<User>) {
+    if (!user.roles) {
+      // Todo:给用户设置默认角色
+    }
     const newUser = await this.userRepository.create(user);
     return this.userRepository.save(newUser);
   }
