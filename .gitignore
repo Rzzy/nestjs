@@ -6,3 +6,4 @@ tmp/
 temp/
 logs/
 dist/
+!src/logs
